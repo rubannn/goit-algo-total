@@ -10,3 +10,29 @@
 # ( 23 ( 2 - 3);: Несиметрично
 # ( 11 }: Несиметрично
 
+
+def check_brackets(s):
+    """Перевіряє симетрію дужок у рядку."""
+    stack = []
+    pairs = {"(": ")", "[": "]", "{": "}"}
+
+    for c in s:
+        if c in pairs:
+            stack.append(c)
+        elif c in pairs.values():
+            if not stack or c != pairs[stack[-1]]:
+                return "Несиметрично"
+            stack.pop()
+
+    return "Симетрично" if not stack else "Несиметрично"
+
+
+tests = [
+    "( ){[ 1 ]( 1 + 3 )( ){ }}",
+    "( 23 ( 2 - 3);",
+    "( 11 }",
+    "{(1)[(2 [3] 4) (5)] }",
+]
+
+for s in tests:
+    print(f"'{s}' — {check_brackets(s)}")
