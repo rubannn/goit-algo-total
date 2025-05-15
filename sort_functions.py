@@ -79,7 +79,7 @@ def timsort(the_array):
     # для кожного run у sorted_runs, об'єднайте їх
     sorted_array = []
     for run in sorted_runs:
-        sorted_array = merge(sorted_array, run)
+        sorted_array = merge_sort(run)
 
     return sorted_array
 
@@ -96,9 +96,8 @@ def merge_k_lists(lists):
         for i in range(0, len(lists), 2):
             left = lists[i]
             right = lists[i + 1] if i + 1 < len(lists) else []
-            merged_lists.append(merge(left, right))
+            merged_lists.append(merge_sort(left + right))
 
         lists = merged_lists
 
     return lists[0]
-
