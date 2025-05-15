@@ -29,7 +29,7 @@ def measure_performance(sort_func, array):
 if __name__ == "__main__":
     print("Вимірювання часу виконання алгоритмів сортування:\n")
 
-    sizes = [100, 1000, 5000]
+    sizes = [100, 1000, 10000]
     algorithms = [insertion_sort, merge_sort, timsort]
     case_labels = {
         "random": "Випадковий",
