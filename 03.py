@@ -22,31 +22,30 @@
 def hanoi_towers(n, source, target, secondary, state):
     """
     Функція для переміщення дисків з одного стрижня на інший.
-        n - количество дисков для перемещения
+        n - кількість дисків для переміщення
         source - оригінальний стрижень
         target - цільовий стрижень
         secondary - допоміжний стрижень
         state - поточний стан (словник)
     """
     if n > 0:
-        # Перемещаем n-1 дисков на вспомогательный стержень
+        # Переміщуємо n-1 дисків на допоміжний стрижень
         hanoi_towers(n - 1, source, secondary, target, state)
 
-        # Перемещаем самый большой диск на целевой стержень
+        # Переміщуємо найбільший диск на цільовий стрижень
         disk = state[source].pop()
         state[target].append(disk)
         print(f"\nПеремістити диск з {source} на {target}: {disk}")
         print(f"Проміжний стан: {state}")
 
-        # Перемещаем n-1 дисков с вспомогательного на целевой стержень
+        # Переміщуємо n-1 дисків з допоміжного на цільовий стрижень
         hanoi_towers(n - 1, secondary, target, source, state)
 
 
-# Начальное состояние
+
 initial_state = {"A": [4, 3, 2, 1], "B": [], "C": []}
 print("Початковий стан:", initial_state)
 
-# Запускаем алгоритм
 hanoi_towers(len(initial_state["A"]), "A", "C", "B", initial_state)
 
 print("Кінцевий стан:", initial_state)
