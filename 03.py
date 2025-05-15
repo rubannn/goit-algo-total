@@ -19,20 +19,18 @@
 # Кінцевий стан: {'A': [], 'B': [], 'C': [3, 2, 1]}
 
 
-def hanoi_towers(n, source, target, auxiliary, state):
+def hanoi_towers(n, source, target, secondary, state):
     """
-    Рекурсивно решает задачу Ханойских башен.
-
-    Параметры:
+    Функція для переміщення дисків з одного стрижня на інший.
         n - количество дисков для перемещения
-        source - исходный стержень
-        target - целевой стержень
-        auxiliary - вспомогательный стержень
-        state - текущее состояние стержней (словарь)
+        source - оригінальний стрижень
+        target - цільовий стрижень
+        secondary - допоміжний стрижень
+        state - поточний стан (словник)
     """
     if n > 0:
         # Перемещаем n-1 дисков на вспомогательный стержень
-        hanoi_towers(n - 1, source, auxiliary, target, state)
+        hanoi_towers(n - 1, source, secondary, target, state)
 
         # Перемещаем самый большой диск на целевой стержень
         disk = state[source].pop()
@@ -41,7 +39,7 @@ def hanoi_towers(n, source, target, auxiliary, state):
         print(f"Проміжний стан: {state}")
 
         # Перемещаем n-1 дисков с вспомогательного на целевой стержень
-        hanoi_towers(n - 1, auxiliary, target, source, state)
+        hanoi_towers(n - 1, secondary, target, source, state)
 
 
 # Начальное состояние

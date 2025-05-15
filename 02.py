@@ -2,6 +2,7 @@
 # «сніжинка Коха» за умови, що користувач повинен мати можливість вказати рівень рекурсії.
 
 import turtle
+import random
 
 
 def koch_curve(t, length, depth):
@@ -18,28 +19,17 @@ def koch_curve(t, length, depth):
         koch_curve(t, length, depth - 1)
 
 
-def draw_koch_snowflake():
+def draw_koch_snowflake(level):
     # Налаштування вікна
     window = turtle.Screen()
     window.bgcolor("white")
-    window.title("Сніжинка Коха")
+    window.title(f"Сніжинка Коха ({level=})")
 
     # Створення черепашки
     t = turtle.Turtle()
     t.speed(0)  # Найшвидша швидкість
     t.color("blue")
     t.penup()
-
-    # Запит рівня рекурсії у користувача
-    depth = int(
-        turtle.numinput(
-            "Рівень рекурсії",
-            "Введіть рівень рекурсії (рекомендовано 1-5):",
-            default=3,
-            minval=0,
-            maxval=6,
-        )
-    )
 
     # Початкові параметри
     size = 300
@@ -48,7 +38,7 @@ def draw_koch_snowflake():
 
     # Малюємо сніжинку (3 криві Коха під кутом 120 градусів)
     for _ in range(3):
-        koch_curve(t, size, depth)
+        koch_curve(t, size, level)
         t.right(120)
 
     # Завершення
@@ -58,4 +48,5 @@ def draw_koch_snowflake():
 
 # Запуск програми
 if __name__ == "__main__":
-    draw_koch_snowflake()
+    level = random.randint(1, 5)  # Випадковий рівень рекурсії від 1 до 5
+    draw_koch_snowflake(level)
