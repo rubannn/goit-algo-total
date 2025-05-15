@@ -25,6 +25,8 @@ tests = [
     "text",
     "12321",
     "abradadarba",
+    "яемзмея",
+    "АрозаупаланалапуАзора",
 ]
 
 for s in tests:
