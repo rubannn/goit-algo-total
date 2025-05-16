@@ -1,6 +1,4 @@
-# goit-algo-hw-03
-goit-algo-hw-03 (thema3)
-
+# goit-algo-hw-03 (thema3)
 # Опис завдань
 
 ## 01.py
