@@ -1,4 +1,4 @@
-# goit-algo-hw-04 (thema4)
+# Тема 4. Алгоритми сортування
 
 # Порівняння алгоритмів сортування: Insertion Sort, Merge Sort, Timsort
 
