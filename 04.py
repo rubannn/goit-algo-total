@@ -48,13 +48,42 @@ def draw_tree(tree_root):
     plt.show()
 
 
-# Створення дерева
-root = Node(0)
-root.left = Node(4)
-root.left.left = Node(5)
-root.left.right = Node(10)
-root.right = Node(1)
-root.right.left = Node(3)
+def build_heap_tree(heap_array):
+    if not heap_array:
+        return None
 
-# Відображення дерева
-draw_tree(root)
+    # Створюємо вузли для кожного елемента купи
+    nodes = [Node(val) for val in heap_array]
+
+    # Зв'язуємо вузли відповідно до структури купи
+    for i in range(len(nodes)):
+        left_idx = 2 * i + 1
+        right_idx = 2 * i + 2
+
+        if left_idx < len(nodes):
+            nodes[i].left = nodes[left_idx]
+        if right_idx < len(nodes):
+            nodes[i].right = nodes[right_idx]
+
+    return nodes[0]  # Повертаємо корінь дерева
+
+
+# # Створення дерева
+# root = Node(0)
+# root.left = Node(4)
+# root.left.left = Node(5)
+# root.left.right = Node(10)
+# root.right = Node(1)
+# root.right.left = Node(3)
+
+# # Відображення дерева
+# draw_tree(root)
+
+# Приклад бінарної мінімальної купи у вигляді масиву
+heap_array = [0, 4, 1, 5, 10, 3]
+
+# Побудова дерева з купи
+heap_tree_root = build_heap_tree(heap_array)
+
+# Візуалізація дерева
+draw_tree(heap_tree_root)
