@@ -27,7 +27,8 @@ from pathlib import Path
 def parse_arguments():
     """Парсинг аргументів командного рядка"""
     if len(sys.argv) < 2:
-        print("Потрібно вказати принаймні вихідну директорію")
+        print("Потрібно вказати принаймні вихідну директорію\n"
+              "Використання: python 01.py <source_directory> [<output_directory>]")
         sys.exit(1)
 
     input_dir = sys.argv[1]
