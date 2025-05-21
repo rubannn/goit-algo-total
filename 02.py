@@ -18,52 +18,64 @@ def pythagoras_tree(t, size, depth, angle=45):
     t.forward(size)
 
     # Зберігаємо позицію та напрямок для правої гілки
-    pos = t.position()  # Запам'ятовуємо поточні координати
-    heading = t.heading()  # Запам'ятовуємо поточний кут напрямку
+    pos = t.position()
+    heading = t.heading()
 
     # Малюємо праву гілку
-    t.right(angle)  # Поворот на заданий кут вправо
-    pythagoras_tree(
-        t, size * 0.7, depth - 1, angle
-    )  # Рекурсивний виклик для правої гілки
+    t.right(angle)
+    pythagoras_tree(t, size * 0.7, depth - 1, angle)
 
     # Повертаємось до збереженої позиції
     t.penup()
-    t.setposition(pos)
+    t.goto(pos)
     t.setheading(heading)
     t.pendown()
 
     # Малюємо ліву гілку
-    t.left(angle)  # Поворот на заданий кут вліво
-    pythagoras_tree(
-        t, size * 0.7, depth - 1, angle
-    )  # Рекурсивний виклик для лівої гілки
+    t.left(angle)
+    pythagoras_tree(t, size * 0.7, depth - 1, angle)
 
     # Повертаємось до збереженої позиції
     t.penup()
-    t.setposition(pos)
+    t.goto(pos)
     t.setheading(heading)
     t.pendown()
 
 
-def draw_pythagoras_tree(level):
+def draw_pythagoras_tree():
     """Функція для налаштування та малювання дерева"""
 
     # Налаштування графічного вікна
     window = turtle.Screen()
-    window.bgcolor("white")  # Білий фон
-    window.title(f"Дерево Піфагора (рівень={level})")  # Заголовок вікна
+    window.bgcolor("white")
+
+    # level_str = f"{random.randint(3, 7)}"
+    level_str = turtle.textinput("Рівень рекурсії", "Введіть рівень рекурсії (3-7):")
+
+    if level_str is None:  # Якщо натиснуто Cancel
+        turtle.bye()
+        return None
+
+    try:
+        level = int(level_str)
+        if level < 3 or level > 7:
+            raise ValueError("Рівень рекурсії повинен бути від 3 до 7.")
+    except ValueError as e:
+        turtle.bye()
+        print(f"Помилка: {e}")
+        return None
+
+    window.title(f"Дерево Піфагора (рівень={level})")
 
     # Створення та налаштування черепашки
     t = turtle.Turtle()
-    t.speed(0)  # Найшвидша швидкість малювання
+    t.speed(0)
     t.color("green")
     t.penup()
-
-    # Початкова позиція черепашки (центруємо дерево)
     t.goto(0, -200)
     t.setheading(90)
     t.width(2)
+    t.pendown()
 
     # Випадковий кут розгалуження між 30 і 60 градусами
     branch_angle = random.randint(30, 60)
@@ -72,17 +84,9 @@ def draw_pythagoras_tree(level):
     pythagoras_tree(t, 100, level, branch_angle)
 
     # Завершуємо роботу
-    t.hideturtle()  # Ховаємо черепашку
-    window.mainloop()  # Тримаємо вікно відкритим
+    t.hideturtle()
+    window.mainloop()
 
 
 if __name__ == "__main__":
-    # Випадково обираємо рівень рекурсії від 3 до 7
-    # Для рівнів менше 3 дерево буде занадто простим,
-    # більше 7 - занадто складним і довгим у малюванні
-
-    # recursion_level = random.randint(3, 7)
-    recursion_level = int(input("Введіть рівень рекурсії (3-7): "))
-
-    # Запускаємо малювання дерева
-    draw_pythagoras_tree(recursion_level)
+    draw_pythagoras_tree()
