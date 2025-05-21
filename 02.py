@@ -2,12 +2,12 @@ import turtle
 import random
 
 
-def pythagoras_tree(t, length, depth, angle=45):
+def pythagoras_tree(t, size, depth, angle=45):
     """Рекурсивна функція для малювання дерева Піфагора
 
     Аргументи:
         t: об'єкт черепашки
-        length: довжина поточної гілки
+        size: довжина поточної гілки
         depth: рівень рекурсії (глибина дерева)
         angle: кут розгалуження гілок
     """
@@ -15,7 +15,7 @@ def pythagoras_tree(t, length, depth, angle=45):
         return
 
     # Малюємо поточну гілку (стовбур)
-    t.forward(length)
+    t.forward(size)
 
     # Зберігаємо позицію та напрямок для правої гілки
     pos = t.position()  # Запам'ятовуємо поточні координати
@@ -24,7 +24,7 @@ def pythagoras_tree(t, length, depth, angle=45):
     # Малюємо праву гілку
     t.right(angle)  # Поворот на заданий кут вправо
     pythagoras_tree(
-        t, length * 0.7, depth - 1, angle
+        t, size * 0.7, depth - 1, angle
     )  # Рекурсивний виклик для правої гілки
 
     # Повертаємось до збереженої позиції
@@ -36,7 +36,7 @@ def pythagoras_tree(t, length, depth, angle=45):
     # Малюємо ліву гілку
     t.left(angle)  # Поворот на заданий кут вліво
     pythagoras_tree(
-        t, length * 0.7, depth - 1, angle
+        t, size * 0.7, depth - 1, angle
     )  # Рекурсивний виклик для лівої гілки
 
     # Повертаємось до збереженої позиції
@@ -80,7 +80,7 @@ if __name__ == "__main__":
     # Випадково обираємо рівень рекурсії від 3 до 7
     # Для рівнів менше 3 дерево буде занадто простим,
     # більше 7 - занадто складним і довгим у малюванні
-    
+
     # recursion_level = random.randint(3, 7)
     recursion_level = int(input("Введіть рівень рекурсії (3-7): "))
 
