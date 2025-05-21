@@ -10,18 +10,9 @@ def koch_curve(t, size, depth):
         t.forward(size)
     else:
         size /= 3.0
-        # koch_curve(t, size, depth - 1)
-        # t.left(60)
-        # koch_curve(t, size, depth - 1)
-        # t.right(120)
-        # koch_curve(t, size, depth - 1)
-        # t.left(60)
-        # koch_curve(t, size, depth - 1)
-
         for angle in [60, -120, 60, 0]:
             koch_curve(t, size, depth - 1)
             t.left(angle)
-        # koch_curve(t, size, depth - 1)
 
 
 def draw_koch_snowflake():
