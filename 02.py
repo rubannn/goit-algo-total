@@ -29,6 +29,7 @@ def draw_koch_snowflake():
     window = turtle.Screen()
     window.bgcolor("white")
 
+    # level_str = f"{random.randint(1, 5)}"  # Випадковий рівень рекурсії від 1 до 5
     level_str = turtle.textinput("Рівень рекурсії", "Введіть рівень рекурсії (1-5):")
 
     if level_str is None:  # Якщо натиснуто Cancel
@@ -69,6 +70,4 @@ def draw_koch_snowflake():
 
 # Запуск програми
 if __name__ == "__main__":
-    # level = random.randint(1, 5)  # Випадковий рівень рекурсії від 1 до 5
-    # level = int(input("Введіть рівень рекурсії (1-5): "))
     draw_koch_snowflake()
