@@ -21,10 +21,9 @@
 ![graph](img.png)
 
 ### Результати роботи алгоритмів
-
-- **DFS (глибина першого пошуку):** `A B C D E F L M K I H G P O R S T`
-
-- **BFS (ширина першого пошуку):** `A B C R S D I T E H P K F L G O M`
+    Start vertex: A
+    DFS: A B C D E F L M K I H G P O R S T
+    BFS: A B C R S D I T E H P K F L G O M
 
 
 ## Пояснення різниці в шляхах
