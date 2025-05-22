@@ -30,7 +30,7 @@ def add_edges(graph, node, pos, x=0, y=0, layer=1):
     return graph
 
 
-def draw_tree(tree_root, traversal_order=None):
+def draw_tree(tree_root, ax, title):
     tree = nx.DiGraph()
     pos = {tree_root.id: (0, 0)}
     tree = add_edges(tree, tree_root, pos)
@@ -38,18 +38,20 @@ def draw_tree(tree_root, traversal_order=None):
     colors = [node[1]["color"] for node in tree.nodes(data=True)]
     labels = {node[0]: node[1]["label"] for node in tree.nodes(data=True)}
 
-    plt.figure(figsize=(8, 5))
     nx.draw(
-        tree, pos=pos, labels=labels, arrows=False, node_size=2500, node_color=colors
+        tree,
+        pos=pos,
+        labels=labels,
+        arrows=False,
+        node_size=1500,
+        node_color=colors,
+        ax=ax,
     )
-
-    if traversal_order:
-        plt.title(f"Traversal order: {' -> '.join(map(str, traversal_order))}")
-
-    plt.show()
+    ax.set_title(title)
 
 
 def build_heap_tree(heap_array):
+    """Створює бінарне дерево з масиву, що представляє купу."""
     if not heap_array:
         return None
 
@@ -68,7 +70,7 @@ def build_heap_tree(heap_array):
 
 
 def generate_color(step, total_steps):
-    """Generate a color from dark to light based on traversal step"""
+    """Генерує колір від темного до світлого залежно від кроку обходу"""
     intensity = int(32 + (step / (total_steps + 1)) * 223)
     return f"#{intensity:02x}{intensity:02x}FF"
 
@@ -86,7 +88,6 @@ def depth_first_traversal(root):
         visited_order.append(node.val)
         node.color = generate_color(len(visited_order), total_nodes)
 
-        # Додаємо спочатку правого, потім лівого нащадка, щоб лівий оброблявся першим
         if node.right:
             stack.append(node.right)
         if node.left:
@@ -117,7 +118,7 @@ def breadth_first_traversal(root):
 
 
 def count_nodes(root):
-    """Count total nodes in the tree"""
+    """Підраховує загальну кількість вузлів у дереві"""
     if not root:
         return 0
     return 1 + count_nodes(root.left) + count_nodes(root.right)
@@ -125,23 +126,27 @@ def count_nodes(root):
 
 # Приклад бінарної мінімальної купи
 heap_array = [0, 4, 1, 5, 10, 3, 2, 6, 7, 8, 9]
+
+# Створюємо фігуру з трьома subplot'ами
+fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(18, 6))
+
+# 1. Исходное дерево
 heap_tree_root = build_heap_tree(heap_array)
+draw_tree(heap_tree_root, ax1, "Original Heap Tree")
 
-# Візуалізація дерева
-print("Original tree:")
-draw_tree(heap_tree_root)
+# 2. DFS обход
+heap_tree_root_dfs = build_heap_tree(heap_array)
+dfs_order = depth_first_traversal(heap_tree_root_dfs)
+draw_tree(
+    heap_tree_root_dfs, ax2, f"DFS Traversal\nOrder: {' → '.join(map(str, dfs_order))}"
+)
 
-# Обхід у глибину (DFS)
-print("\nDepth First Traversal:")
-dfs_order = depth_first_traversal(heap_tree_root)
-print("Order:", dfs_order)
-draw_tree(heap_tree_root, dfs_order)
+# 3. BFS обход
+heap_tree_root_bfs = build_heap_tree(heap_array)
+bfs_order = breadth_first_traversal(heap_tree_root_bfs)
+draw_tree(
+    heap_tree_root_bfs, ax3, f"BFS Traversal\nOrder: {' → '.join(map(str, bfs_order))}"
+)
 
-# Відновлення дерева для наступного обходу
-heap_tree_root = build_heap_tree(heap_array)
-
-# Обхід у ширину (BFS)
-print("\nBreadth First Traversal:")
-bfs_order = breadth_first_traversal(heap_tree_root)
-print("Order:", bfs_order)
-draw_tree(heap_tree_root, bfs_order)
+plt.tight_layout()
+plt.show()
