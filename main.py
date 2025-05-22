@@ -22,7 +22,8 @@ def generate_test_cases(size):
 def measure_performance(sort_func, array):
     setup = f"from __main__ import {sort_func.__name__}; import copy; arr = copy.deepcopy({array})"
     stmt = f"{sort_func.__name__}(arr)"
-    time = timeit.timeit(stmt, setup=setup, number=10) / 10
+    test_count = 10
+    time = timeit.timeit(stmt, setup=setup, number=test_count) / test_count
     return time
 
 

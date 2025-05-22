@@ -79,7 +79,7 @@ def timsort(the_array):
     # для кожного run у sorted_runs, об'єднайте їх
     sorted_array = []
     for run in sorted_runs:
-        sorted_array = merge_sort(run)
+        sorted_array = merge_sort(run + sorted_array)
 
     return sorted_array
 
