@@ -14,16 +14,16 @@ class Node:
 
 
 def add_edges(graph, node, pos, x=0, y=0, layer=1):
-    if node is not None:
+    if node is not None and node.val is not None:  # Check for None values
         graph.add_node(
             node.id, color=node.color, label=node.val
         )  # Використання id та збереження значення вузла
-        if node.left:
+        if node.left and node.left.val is not None:
             graph.add_edge(node.id, node.left.id)
             l = x - 1 / 2**layer
             pos[node.left.id] = (l, y - 1)
             l = add_edges(graph, node.left, pos, x=l, y=y - 1, layer=layer + 1)
-        if node.right:
+        if node.right and node.right.val is not None:
             graph.add_edge(node.id, node.right.id)
             r = x + 1 / 2**layer
             pos[node.right.id] = (r, y - 1)
@@ -80,7 +80,7 @@ def build_heap_tree(heap_array):
 # draw_tree(root)
 
 # Приклад бінарної мінімальної купи у вигляді масиву
-heap_array = [0, 4, 1, 5, 10, 3]
+heap_array = [0, 4, 1, 5, 10, 3, 2, 6, 7, 8, 9, None, None, 17, None]
 
 # Побудова дерева з купи
 heap_tree_root = build_heap_tree(heap_array)
