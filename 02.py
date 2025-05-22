@@ -1,19 +1,23 @@
 from collections import deque
+import random
 
 
 def dfs_iterative(graph, start_vertex):
     visited = set()
+    visited_order = []
     # Використовуємо стек для зберігання вершин
     stack = [start_vertex]
     while stack:
         # Вилучаємо вершину зі стеку
         vertex = stack.pop()
         if vertex not in visited:
-            print(vertex, end=" ")
             # Відвідуємо вершину
             visited.add(vertex)
+            # Якщо не була відвідана, додаємо її до списку відвіданих вершин
+            visited_order.append(vertex)
             # Додаємо сусідні вершини до стеку
             stack.extend(reversed(graph[vertex]))
+    return visited_order
 
 
 def bfs_iterative(graph, start):
@@ -21,21 +25,23 @@ def bfs_iterative(graph, start):
     visited = set()
     # Ініціалізація черги з початковою вершиною
     queue = deque([start])
+    visited_order = []
 
     while queue:  # Поки черга не порожня, продовжуємо обхід
         # Вилучаємо першу вершину з черги
         vertex = queue.popleft()
         # Перевіряємо, чи була вершина відвідана раніше
         if vertex not in visited:
-            # Якщо не була відвідана, друкуємо її
-            print(vertex, end=" ")
+            # Якщо не була відвідана, додаємо її до списку відвіданих вершин
+            visited_order.append(vertex)
+
             # Додаємо вершину до множини відвіданих вершин
             visited.add(vertex)
             # Додаємо всіх невідвіданих сусідів вершини до кінця черги
             # Операція різниці множин вилучає вже відвідані вершини зі списку сусідів
             queue.extend(set(graph[vertex]) - visited)
     # Повертаємо множину відвіданих вершин після завершення обходу
-    return visited
+    return visited_order
 
 
 graph = {
@@ -58,11 +64,9 @@ graph = {
     "T": ["S"],
 }
 
+# початкова_вершина
+start_vertex = random.choice(list(graph.keys()))
+print("Start vertex:", start_vertex)
 
-# Виклик функції DFS
-print("DFS:\t", end="")
-dfs_iterative(graph, "A")
-
-# Запуск алгоритму BFS
-print("\nBFS:\t", end="")
-bfs_iterative(graph, "A")
+print("DFS:\t", " ".join(dfs_iterative(graph, start_vertex)))
+print("BFS:\t", " ".join(bfs_iterative(graph, start_vertex)))
