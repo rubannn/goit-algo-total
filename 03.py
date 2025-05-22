@@ -1,5 +1,7 @@
 import networkx as nx
 import matplotlib.pyplot as plt
+import random
+from tabulate import tabulate
 
 
 # Алгоритм Дейкстри для пошуку найкоротшого шляху в графі
@@ -50,15 +52,36 @@ graph = {
     "T": {"S": 5},
 }
 
-start_node = "A"
-pathes = dijkstra(graph, start_node)
-print(pathes)
+
+# Обчислюємо найкоротші шляхи для всіх вершин
+all_pathes = {}
+vertices = sorted(graph.keys())
+for vertex in vertices:
+    all_pathes[vertex] = dijkstra(graph, vertex)
+
+# Створюємо матрицю відстаней
+distance_matrix = []
+headers = ["From/To"] + vertices
+for from_vertex in vertices:
+    row = [from_vertex]
+    for to_vertex in vertices:
+        distance = all_pathes[from_vertex][to_vertex]
+        row.append(distance if distance != float("infinity") else "∞")
+    distance_matrix.append(row)
+
+# Виводимо матрицю відстаней у вигляді таблиці
+print("\nМатриця найкоротших відстаней між всіма вершинами:")
+print(tabulate(distance_matrix, headers=headers, tablefmt="grid"))
+
+# початкова_вершина
+start_vertex = random.choice(list(graph.keys()))
 
 # Знаходимо найдальшу вершину від стартової
+pathes = all_pathes[start_vertex]
 far_node = max(pathes, key=lambda k: pathes[k])
-red_nodes = [far_node, start_node]
+red_nodes = [far_node, start_vertex]
 
-
+# Візуалізація графа
 G = nx.Graph(graph)
 pos = nx.spring_layout(G, seed=42)
 
@@ -66,16 +89,45 @@ for vertex in graph:
     for neighbor, weight in graph[vertex].items():
         G.add_edge(vertex, neighbor, weight=weight)
 
+plt.figure(figsize=(12, 8))
+
+# Створюємо інформативний заголовок
+title = f"Граф з вагами ребер\nПочаткова вершина: {start_vertex} | Найвіддаленіша вершина: {far_node} | Відстань: {pathes[far_node]}"
+node_size = 600
+
 nx.draw(
-    G, pos, with_labels=True, node_color="lightblue", node_size=600, font_weight="bold"
+    G,
+    pos,
+    with_labels=True,
+    node_color="lightblue",
+    node_size=node_size,
+    font_weight="bold",
 )
 
-# Додаємо підписи ваг ребер (опціонально)
+# Виділяємо початкову та найвіддаленішу вершини
+nx.draw_networkx_nodes(
+    G,
+    pos,
+    nodelist=[start_vertex],
+    node_color="green",
+    node_size=node_size,
+    label=f"Початкова ({start_vertex})",
+)
+nx.draw_networkx_nodes(
+    G,
+    pos,
+    nodelist=[far_node],
+    node_color="red",
+    node_size=node_size,
+    label=f"Найвіддаленіша ({far_node}, відстань={pathes[far_node]})",
+)
+
+# Додаємо підписи ваг ребер
 edge_labels = nx.get_edge_attributes(G, "weight")
 nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
 
-nx.draw_networkx_nodes(G, pos, nodelist=red_nodes, node_color="red", node_size=800)
+# Додаємо легенду
+plt.legend(scatterpoints=1, frameon=True, labelspacing=2, title="Вершини:")
 
-
-plt.title("Граф з вагами ребер")
+plt.title(title, pad=20)
 plt.show()
