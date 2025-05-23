@@ -44,16 +44,16 @@ def draw_graph(graph, start_vertex, distances, paths, legend):
     # Малюємо граф
     nx.draw_networkx_nodes(G, pos, node_size=700, node_color=node_colors)
     nx.draw_networkx_edges(G, pos, arrowstyle="-", arrowsize=20, width=1)
-    nx.draw_networkx_labels(G, pos, font_size=16, font_family="sans-serif")
+    nx.draw_networkx_labels(G, pos, font_size=16, font_family="times new roman")
 
     # Додаємо ваги ребер
     edge_labels = nx.get_edge_attributes(G, "weight")
-    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=12)
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=10)
 
     # Додаємо інформацію про відстані
     for node, (x, y) in pos.items():
         plt.text(
-            x,
+            x + 0.1,
             y + 0.1,
             s=f"dist={distances[node]}",
             bbox=dict(facecolor="white", alpha=0.1),
@@ -111,9 +111,7 @@ print(f"Найкоротші шляхи від вершини '{start_vertex}':"
 
 legend = ""
 for vertex in distances:
-    legend += (
-        f"{start_vertex} → {vertex}: {distances[vertex]} ({' → '.join(paths[vertex])})\n"
-    )
+    legend += f"{start_vertex} → {vertex}: {distances[vertex]} ({' → '.join(paths[vertex])})\n"
 
 print(legend)
 
