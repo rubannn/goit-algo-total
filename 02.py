@@ -1,4 +1,5 @@
 import heapq
+import random
 
 
 def merge_k_lists(lists):
@@ -22,22 +23,36 @@ def merge_k_lists(lists):
         if element_idx + 1 < len(lists[list_idx]):
             next_val = lists[list_idx][element_idx + 1]
             heapq.heappush(min_heap, (next_val, list_idx, element_idx + 1))
-
-
     return merged_result
 
 
-data = [
-    ([1, 4, 5], [1, 3, 4], [2, 6]),
-    ([1, 3, 5, 7, 9], [2, 4, 6, 8, 10], [0, 10, 20, 30]),
-    ([-5, -3, 0, 2, 4], [1, 2, 3, 4, 5], [10, 20, 30], [-10, -8, -6]),
-    ([7, 14, 21, 28], [3, 6, 9, 12], [0, 1, 1, 2, 3, 5, 8]),
-    ([-20, -15, -10, -5, 0], [5, 10, 15, 20], [100, 200], [0, 0, 0, 1, 1]),
-]
+def generate_test_data(
+    num_datasets=5,
+    max_lists_per_dataset=4,
+    max_elements_per_list=7,
+    min_value=-20,
+    max_value=30,
+):
+    data = []
+    for _ in range(num_datasets):
+        num_lists = random.randint(2, max_lists_per_dataset)
+        dataset = []
+        for _ in range(num_lists):
+            num_elements = random.randint(2, max_elements_per_list)
+            lst = sorted(
+                [random.randint(min_value, max_value) for _ in range(num_elements)]
+            )
+            dataset.append(lst)
+        data.append(dataset)
+    return data
 
+
+# Генеруємо тестові дані
+data = generate_test_data(max_elements_per_list=5)
+
+# Виводимо результати для кожного набору даних
 for i, test in enumerate(data):
     print(f"\nНабір даних {i + 1}:")
     for lst in test:
         print(lst)
     print("Об'єднаний відсортований список:", merge_k_lists(test))
-
