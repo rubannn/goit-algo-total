@@ -80,7 +80,7 @@ def build_heap_tree(heap_array):
 # draw_tree(root)
 
 # Приклад бінарної мінімальної купи у вигляді масиву
-heap_array = [0, 4, 1, 5, 10, 3, 2, 6, 7, 8, 9, None, None, 17, None]
+heap_array = [0, 4, 1, 5, 10, 3, 2, 6, 7, 8, 9, None, None, 17, None, None, None, None, 20]
 
 # Побудова дерева з купи
 heap_tree_root = build_heap_tree(heap_array)
