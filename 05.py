@@ -1,7 +1,6 @@
 import uuid
 import networkx as nx
 import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
 from collections import deque
 
 
@@ -19,9 +18,9 @@ def add_edges(graph, node, pos, x=0, y=0, layer=1):
         graph.add_node(node.id, color=node.color, label=node.val)
         if node.left:
             graph.add_edge(node.id, node.left.id)
-            l = x - 1 / 2**layer
-            pos[node.left.id] = (l, y - 1)
-            add_edges(graph, node.left, pos, x=l, y=y - 1, layer=layer + 1)
+            L = x - 1 / 2**layer
+            pos[node.left.id] = (L, y - 1)
+            add_edges(graph, node.left, pos, x=L, y=y - 1, layer=layer + 1)
         if node.right:
             graph.add_edge(node.id, node.right.id)
             r = x + 1 / 2**layer

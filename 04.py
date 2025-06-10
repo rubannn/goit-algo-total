@@ -20,9 +20,9 @@ def add_edges(graph, node, pos, x=0, y=0, layer=1):
         )  # Використання id та збереження значення вузла
         if node.left and node.left.val is not None:
             graph.add_edge(node.id, node.left.id)
-            l = x - 1 / 2**layer
-            pos[node.left.id] = (l, y - 1)
-            l = add_edges(graph, node.left, pos, x=l, y=y - 1, layer=layer + 1)
+            L = x - 1 / 2**layer
+            pos[node.left.id] = (L, y - 1)
+            L = add_edges(graph, node.left, pos, x=L, y=y - 1, layer=layer + 1)
         if node.right and node.right.val is not None:
             graph.add_edge(node.id, node.right.id)
             r = x + 1 / 2**layer
