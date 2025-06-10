@@ -1,15 +1,20 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.integrate import quad
 
-# Параметри трилисника
-theta = np.linspace(0, 2 * np.pi, 1000)
-r = np.sin(3 * theta)
-x_curve = r * np.cos(theta)
-y_curve = r * np.sin(theta)
 
-# Межі інтегрування (можна змінювати)
-x_min, x_max = 0, 1.0  # Межі по x
-y_min, y_max = -1.0, 1.0  # Межі по y
+# Задана функція
+def func(x):
+    return (
+        2 * np.exp(-((x - 3) ** 2))
+        + 3 * np.exp(-0.5 * (x - 6) ** 2)
+        + 4 * np.exp(-0.5 * (x - 9) ** 2)
+    )
+
+
+# Межі інтегрування
+x_min, x_max = 4, 9
+y_min, y_max = 0, 5  # Верхня межа обрана з урахуванням максимального значення функції
 
 # Площа прямокутника для методу Монте-Карло
 area_rectangle = (x_max - x_min) * (y_max - y_min)
@@ -21,37 +26,21 @@ N = 50000
 x_random = np.random.uniform(x_min, x_max, N)
 y_random = np.random.uniform(y_min, y_max, N)
 
-# Відкидаємо точки поза одиничним колом (бо трилисник обмежений колом)
-r_random = np.sqrt(x_random**2 + y_random**2)
-in_circle = (
-    (r_random <= 1)
-    & (x_random >= x_min)
-    & (x_random <= x_max)
-    & (y_random >= y_min)
-    & (y_random <= y_max)
-)
-x_in = x_random[in_circle]
-y_in = y_random[in_circle]
+# Обчислення значень функції для випадкових x
+y_func = func(x_random)
 
-# Перевірка, чи точка всередині трилисника
-theta_in = np.arctan2(y_in, x_in)
-theta_in = np.mod(theta_in, 2 * np.pi)  # Приводимо до [0, 2π]
-r_in = np.sqrt(x_in**2 + y_in**2)
-r_polar = np.sin(3 * theta_in)
-
-# Враховуємо тільки позитивні значення r
-inside = (r_polar >= 0) & (r_in <= r_polar)
+# Визначення точок, які знаходяться під кривою (всередині області інтегрування)
+inside = y_random <= y_func
 
 # Обчислення площі методом Монте-Карло
-# Відношення точок всередині трилисника до точок у прямокутнику, помножене на площу прямокутника
 area_estimate = (np.sum(inside) / N) * area_rectangle
 
-# Точна площа трилисника (3 пелюстки, кожна з площею π/12)
-A_exact = np.pi / 4 / 2  # Загальна площа: 3 * (π/12) / 2 = π/8
-
 # Візуалізація
+x_plot = np.linspace(0, 15, 1000)
+y_plot = func(x_plot)
+
 plt.figure(figsize=(10, 8))
-plt.plot(x_curve, y_curve, color="blue", linewidth=2, label="Контур трилисника")
+plt.plot(x_plot, y_plot, color="blue", linewidth=2, label="Функція")
 
 # Додаємо межі інтегрування (прямокутник)
 plt.plot(
@@ -64,38 +53,38 @@ plt.plot(
 )
 
 plt.scatter(
-    x_in[inside],
-    y_in[inside],
+    x_random[inside],
+    y_random[inside],
     color="green",
     s=1,
     alpha=0.6,
-    label="Точки всередині трилисника",
+    label="Точки під кривою",
 )
 plt.scatter(
-    x_in[~inside],
-    y_in[~inside],
+    x_random[~inside],
+    y_random[~inside],
     color="red",
     s=1,
     alpha=0.2,
-    label="Точки поза трилисником",
+    label="Точки над кривою",
 )
 
 # Стилізація графіка
 plt.title(
-    f"Оцінка площі трилисника методом Монте-Карло\nМежі: x ∈ [{x_min}, {x_max}], y ∈ [{y_min}, {y_max}]",
+    f"Оцінка інтегралу методом Монте-Карло\nМежі: x ∈ [{x_min}, {x_max}], y ∈ [{y_min}, {y_max}]",
     fontsize=14,
 )
 plt.xlabel("x")
 plt.ylabel("y")
-plt.axis("equal")
 plt.grid(True, linestyle="--", alpha=0.5)
 plt.legend(loc="upper right")
 plt.tight_layout()
 
 # Виведення результатів
 print(f"Межі інтегрування: x ∈ [{x_min}, {x_max}], y ∈ [{y_min}, {y_max}]")
-print(f"Оцінка площі (Монте-Карло): {area_estimate:.5f}")
-print(f"Точна площа (π/4): {A_exact:.5f}")
-print(f"Похибка: {abs(area_estimate - A_exact):.5f}")
+print(f"Оцінка інтегралу (Монте-Карло): {area_estimate:.5f}")
 
+exact_integral, _ = quad(func, x_min, x_max)
+print(f"Точний інтеграл: {exact_integral:.5f}")
+print(f"Похибка: {abs(area_estimate - exact_integral):.5f}")
 plt.show()
