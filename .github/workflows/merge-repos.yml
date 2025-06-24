@@ -1,0 +1,87 @@
+name: Merge Multiple Repos
+
+on:
+  workflow_dispatch:
+
+jobs:
+  merge-repos:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout target repo (goit-algo-total)
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GH_PAT }}
+        fetch-depth: 0
+
+    - name: Set up Git
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "actions@github.com"
+
+    - name: Merge all repos with full history using git subtree
+      run: |
+        set -e
+
+        REPOS=(
+          "goit-algo-hw-02"
+          "goit-algo-hw-03"
+          "goit-algo-hw-04"
+          "goit-algo-hw-05"
+          "goit-algo-hw-06"
+          "goit-algo-hw-07"
+          "goit-algo-hw-08"
+          "goit-algo-hw-09"
+          "goit-algo-hw-10"
+          "goit-algo-final"
+        )
+
+        for REPO in "${REPOS[@]}"; do
+          echo "==== Processing $REPO ===="
+          git remote add $REPO https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository_owner }}/$REPO.git
+          git fetch $REPO
+
+          # Определяем основную ветку: main или master
+          BRANCH=$(git ls-remote --heads https://github.com/${{ github.repository_owner }}/$REPO.git | grep -E 'refs/heads/(main|master)$' | sed 's/.*refs\/heads\///' | head -n 1)
+          if [ -z "$BRANCH" ]; then
+            BRANCH="main"
+          fi
+
+          # Проверяем, есть ли уже subtree для этого репо (чтобы не дублировать)
+          if git rev-parse --verify refs/heads/subtree-$REPO >/dev/null 2>&1; then
+            echo "Subtree for $REPO exists, merging updates..."
+            git subtree pull --prefix=$REPO $REPO $BRANCH --squash
+          else
+            echo "Adding subtree for $REPO"
+            git subtree add --prefix=$REPO $REPO $BRANCH
+          fi
+
+          git remote remove $REPO
+        done
+
+        # Обновляем README.md
+        echo "# Basic Algorithms and Data Structures" > README.md
+        echo "" >> README.md
+        echo "This repository aggregates the following sub-projects:" >> README.md
+        echo "" >> README.md
+
+        for REPO in "${REPOS[@]}"; do
+          if [ -f "${REPO}/README.md" ]; then
+            TITLE=$(grep -m 1 -E '\S' "${REPO}/README.md" | sed 's/^#\+ *//')
+            if [ -z "$TITLE" ]; then
+              TITLE=$REPO
+            fi
+          else
+            TITLE=$REPO
+          fi
+          echo "- [${TITLE}](./${REPO}/)" >> README.md
+        done
+
+        git add README.md
+        git commit -m "Update README.md with links to merged repositories" || echo "⚠️ Nothing to commit for README"
+
+    - name: Push merged contents to main
+      uses: ad-m/github-push-action@v0.8.0
+      with:
+        github_token: ${{ secrets.GH_PAT }}
+        branch: main
